@@ -40,6 +40,7 @@ def send_email(subject, text):
         server.ehlo()
         server.starttls()
         server.ehlo()
+        print("trying to log in")
         server.login(gmail_user, gmail_pass)
         print("logged in")
         server.sendmail(gmail_user, to_user, message)
