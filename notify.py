@@ -3,6 +3,9 @@ import html5lib, lxml, lxml.cssselect
 import requests
 import time
 import os
+import boto3
+
+S3Client = boto3.client('s3')
 
 s3 = S3Client(os.environ['GMAIL_USERNAME'], os.environ['GMAIL_PASSWORD'], os.environ['TARGET_EMAIL'])
 print(s3)
