@@ -75,4 +75,4 @@ def run_checker(interval, status):
             start_time = check_time
             send_email('Checker status update', 'Still running fine!')
 
-run_checker(10, 60608)
+run_checker(10, 20)
