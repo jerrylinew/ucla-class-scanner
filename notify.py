@@ -9,6 +9,7 @@ to_user = []
 recipient = input('What email address do you want to send to? ')
 to_user.append(recipient)
 
+
 def scrape_registrar(course, url, css_query):
     r = requests.get(url)
     raw_html = r.text
@@ -33,11 +34,14 @@ def send_email(subject, text):
     message = 'Subject: %s\n\n%s' % (subject, text)
 
     try:
+        print("hi")
         server = smtplib.SMTP('smtp.gmail.com', 587)
+        print("username: %s, password: %s" % (gmail_user, gmail_pass))
         server.ehlo()
         server.starttls()
         server.ehlo()
         server.login(gmail_user, gmail_pass)
+        print("logged in")
         server.sendmail(gmail_user, to_user, message)
         print('Email sent successfully')
         server.quit()
