@@ -3,12 +3,6 @@ import html5lib, lxml, lxml.cssselect
 import requests
 import time
 import os
-# import boto3
-
-# S3Client = boto3.client('s3')
-
-# s3 = S3Client(os.environ['GMAIL_USERNAMARGET_EMAIL'])E'], os.environ['GMAIL_PASSWORD'], os.environ['T
-# print(s3)
 
 gmail_user = os.environ['GMAIL_USERNAME']
 gmail_pass = os.environ['GMAIL_PASSWORD']
@@ -84,4 +78,4 @@ def run_checker(interval, status):
             start_time = check_time
             send_email('Checker status update', 'Still running fine!')
 
-run_checker(10, 20)
+run_checker(10, 14400)
