@@ -2,13 +2,18 @@ import smtplib
 import html5lib, lxml, lxml.cssselect
 import requests
 import time
+import os
 
-gmail_user = input('Enter your email address: ')
-gmail_pass = input('Enter your password: ')
+s3 = S3Client(os.environ['GMAIL_USERNAME'], os.environ['GMAIL_PASSWORD'], os.environ['TARGET_EMAIL'])
+print(s3)
+
+gmail_user = os.environ['GMAIL_USERNAME']
+gmail_pass = os.environ['GMAIL_PASSWORD']
 to_user = []
-recipient = input('What email address do you want to send to? ')
+recipient = os.environ['TARGET_EMAIL']
 to_user.append(recipient)
-
+print(gmail_user)
+print(gmail_pass)
 
 def scrape_registrar(course, url, css_query):
     r = requests.get(url)
@@ -33,21 +38,17 @@ def scrape_registrar(course, url, css_query):
 def send_email(subject, text):
     message = 'Subject: %s\n\n%s' % (subject, text)
 
-    #try:
-    print("hi")
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    print("username: %s, password: %s" % (gmail_user, gmail_pass))
-    server.ehlo()
-    server.starttls()
-    server.ehlo()
-    print("trying to log in")
-    server.login(gmail_user, gmail_pass)
-    print("logged in")
-    server.sendmail(gmail_user, to_user, message)
-    print('Email sent successfully')
-    server.quit()
-    # except smtplib.SMTPException:
-      #  print('Error: sending email failed')
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login(gmail_user, gmail_pass)
+        server.sendmail(gmail_user, to_user, message)
+        print('Email sent successfully')
+        server.quit()
+    except smtplib.SMTPException:
+        print('Error: sending email failed')
 
 
 def run_checker(interval, status):
