@@ -9,8 +9,7 @@ gmail_pass = os.environ['GMAIL_PASSWORD']
 to_user = []
 recipient = os.environ['TARGET_EMAIL']
 to_user.append(recipient)
-print(gmail_user)
-print(gmail_pass)
+
 
 def scrape_registrar(course, url, css_query):
     r = requests.get(url)
@@ -60,6 +59,7 @@ def run_checker(interval, status):
     class1_open = False
     class2_open = False
     start_time = time.time()
+    initial_time = time.time()
 
     while not class1_open or not class2_open:
         curr_time = time.strftime('%a, %d %b %Y %H:%M:%S', time.localtime())
@@ -74,7 +74,7 @@ def run_checker(interval, status):
 
         time.sleep(interval)
         check_time = time.time()
-        if check_time - start_time > status:
+        if check_time - start_time > status or check_time - initial_time < 15:
             start_time = check_time
             send_email('Checker status update', 'Still running fine!')
 
