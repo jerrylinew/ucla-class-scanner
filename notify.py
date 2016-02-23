@@ -11,15 +11,16 @@ recipient = os.environ['TARGET_EMAIL']
 to_user.append(recipient)
 
 
-def scrape_registrar(course, url, css_query):
+def scrape_registrar(course, url, css_query, max_capacity):
     r = requests.get(url)
     raw_html = r.text
     page = html5lib.parse(raw_html, treebuilder='lxml', namespaceHTMLElements=False)
     selector = lxml.cssselect.CSSSelector(css_query)
     match = selector(page)
     status = match[0].text
+    print('current: %s, capcity: %s' % (status, max_capacity))
 
-    if status != 'Closed':
+    if status != max_capacity:
         subj = '%s is availible, sign up now!\n' % course
         body = 'https://be.my.ucla.edu/ClassPlanner/ClassPlan.aspx'
 
@@ -48,13 +49,17 @@ def send_email(subject, text):
 
 
 def run_checker(interval, status):
-    default_query = '#ctl00_BodyContentPlaceHolder_detselect_ctl02_ctl02_Status span span'
+    stat100A_query = '#ctl00_BodyContentPlaceHolder_detselect_ctl02_ctl02_WaitListTotal span'
+    math170A_query = '#ctl00_BodyContentPlaceHolder_detselect_ctl02_ctl02_EnrollTotal span'
 
     class1 = 'Stat 100A'
     class2 = 'Math 170A'
 
-    urlStat100A = 'http://www.registrar.ucla.edu/schedule/detselect.aspx?termsel=16S&subareasel=STATS&idxcrs=0100A+++'
-    urlMath170A = 'http://www.registrar.ucla.edu/schedule/detselect.aspx?termsel=16S&subareasel=MATH&idxcrs=0170A+++'
+    stat100A_url = 'http://www.registrar.ucla.edu/schedule/detselect.aspx?termsel=16S&subareasel=STATS&idxcrs=0100A+++'
+    math170A_url = 'http://www.registrar.ucla.edu/schedule/detselect.aspx?termsel=16S&subareasel=MATH&idxcrs=0170A+++'
+
+    stat100A_capacity = '20'
+    math170A_capacity = '40'
 
     class1_open = False
     class2_open = False
@@ -66,11 +71,11 @@ def run_checker(interval, status):
 
         if not class1_open:
             print('At %s, checking for open spots for %s...' % (curr_time, class1))
-            class1_open = scrape_registrar(class1, urlStat100A, default_query)
+            class1_open = scrape_registrar(class1, stat100A_url, stat100A_query, stat100A_capacity)
 
         if not class2_open:
             print('At %s, checking for open spots for %s...' % (curr_time, class2))
-            class2_open = scrape_registrar(class2, urlMath170A, default_query)
+            class2_open = scrape_registrar(class2, math170A_url, math170A_query, math170A_capacity)
 
         time.sleep(interval)
         check_time = time.time()
