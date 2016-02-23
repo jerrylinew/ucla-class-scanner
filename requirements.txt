@@ -1,0 +1,4 @@
+cssselect==0.9.1
+html5lib==0.9999999
+lxml==3.5.0
+requests==2.9.1
