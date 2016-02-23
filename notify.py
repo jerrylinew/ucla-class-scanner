@@ -33,21 +33,21 @@ def scrape_registrar(course, url, css_query):
 def send_email(subject, text):
     message = 'Subject: %s\n\n%s' % (subject, text)
 
-    try:
-        print("hi")
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        print("username: %s, password: %s" % (gmail_user, gmail_pass))
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        print("trying to log in")
-        server.login(gmail_user, gmail_pass)
-        print("logged in")
-        server.sendmail(gmail_user, to_user, message)
-        print('Email sent successfully')
-        server.quit()
-    except smtplib.SMTPException:
-        print('Error: sending email failed')
+    #try:
+    print("hi")
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    print("username: %s, password: %s" % (gmail_user, gmail_pass))
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    print("trying to log in")
+    server.login(gmail_user, gmail_pass)
+    print("logged in")
+    server.sendmail(gmail_user, to_user, message)
+    print('Email sent successfully')
+    server.quit()
+    # except smtplib.SMTPException:
+      #  print('Error: sending email failed')
 
 
 def run_checker(interval, status):
