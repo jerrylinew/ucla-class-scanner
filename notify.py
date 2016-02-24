@@ -12,7 +12,13 @@ to_user.append(recipient)
 
 
 def scrape_registrar(course, url, css_query, max_capacity):
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+    except:
+        print("Connection reset. Retrying.")
+        send_email('Connection reset', 'Retrying')
+        return
+
     raw_html = r.text
     page = html5lib.parse(raw_html, treebuilder='lxml', namespaceHTMLElements=False)
     selector = lxml.cssselect.CSSSelector(css_query)
